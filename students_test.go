@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 	"time"
-	
+	"reflect"
 )
 
 // DO NOT EDIT THIS FUNCTION
@@ -70,7 +70,7 @@ func TestSwap(t *testing.T){
 
 	tests.Swap(0,1)
 
-	if tests[0] != tests[1]{
+	if tests[0] != pers2{
 		t.Errorf("Person did not swap")
 	}
 	
@@ -115,5 +115,65 @@ type testNew struct{
 	
 		}
 		
+			
 		
+		func TestRows(t *testing.T){
+
+			var testrows = []struct{
+				input Matrix
+				expected [][]int
+			}{
+				{input: Matrix{rows: 2, cols: 2, data: []int{1, 2, 3, 4}},
+				expected: [][]int{{1, 2}, {3, 4}},},
+
+				{input: Matrix{1, 1, []int{1}},
+				expected: [][]int{{1}},},
+			}
+				for _, p := range testrows{
+				if !reflect.DeepEqual(p.input.Rows(), p.expected){
+					t.Errorf("Expected %v, got %v:", p.expected, p.input.Rows())
+				}
+			}
+		
+		}
+		
+				
+		func TestCols(t *testing.T){
+			var testcols = []struct{
+				input Matrix
+				expected [][]int
+			}{
+				{	input: Matrix{2, 2, []int{1, 2, 3, 4}},
+					expected: [][]int{{1, 3}, {2, 4}},},
+			}
+
+			for _, p:= range testcols{
+				if !reflect.DeepEqual(p.input.Cols(), p.expected){
+					t.Errorf("Test failed: expected %v, got %v:", p.expected, p.input.Cols())
+				}
+			}
+		}
+		
+	
+		func TestSet(t *testing.T){
+
+			var testset=[]struct{
+				input Matrix
+				data struct{r, c, v int}
+				expected bool
+			}{
+				{	input: Matrix{3, 3, []int{1, 2, 3, 4, 5, 6, 7, 8, 9}},
+					data: struct{r int; c int; v int}{2, 2, 0},
+					expected: true,},
+				{	input: Matrix{2, 2, []int{1, 2, 3, 4}},
+					data: struct{r int; c int; v int}{2, 2, 0},
+					expected: false,},
+			}
+			
+			for _, v:=range testset{
+				if v.expected != v.input.Set(v.data.r, v.data.c, v.data.v){
+					t.Errorf("Expected %v, got %v:", v.expected, v.input.Set(v.data.r, v.data.c, v.data.v))
+				}
+			}
+		}
 		
